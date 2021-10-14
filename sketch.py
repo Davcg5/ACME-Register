@@ -41,10 +41,13 @@ def checkCrosses(name, schedule):
             print(f"esta {al} con {name}")
             dicti[dayName][time] = list(set(dicti[dayName][time] +[name]))
 
-personal = ['RENE=MO10:00-12:00,TU10:00-12:00,TH01:00-03:00,SA14:00-18:00,SU20:00-21:00', 'ASTRID=MO10:00-12:00,TH12:00-14:00,SU20:00-21:00', 'ANDRES=MO10:00-12:00,TH12:00-14:00,SU20:00-21:00']
+
+
+file1 = open('myfile.txt', 'r')
+lines = file1.readlines()
 
 dicti={}
-for p in personal: 
+for p in lines: 
   name, schedule = separateNameAndSchedule(p)
   print("llega", name)
   schedule = schedule.split(",")
