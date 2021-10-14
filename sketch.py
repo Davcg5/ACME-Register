@@ -1,4 +1,4 @@
-CHARACTERSOFDAY = 2
+DAYSOFWEEK= ["MO", "TU", "WE", "TH", "FR", "SA", "SU"]
 
 
 def convertToRange(stringRange):
@@ -16,7 +16,12 @@ def convertStringDateToDecimal(string):
   h,m = string.split(":")
   return float(int(h)+int(m)/60)
 def separateDayNameAndTime(day): 
-  return day[:CHARACTERSOFDAY], convertToRange(day[CHARACTERSOFDAY:])
+  for weekDay in DAYSOFWEEK: 
+    if weekDay in day: 
+      time= day.split(weekDay)[-1]
+      dayName = weekDay      
+      return dayName, convertToRange(time)
+
 def separateNameAndSchedule(chain):
   name, schedule = chain.split("=")
   return name, schedule 
