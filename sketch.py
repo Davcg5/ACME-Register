@@ -27,19 +27,39 @@ def separateNameAndSchedule(chain):
   return name, schedule 
 
 def checkCrosses(name, schedule):
-
   for day in schedule: 
       dayName, time = separateDayNameAndTime(day)
-
       if dayName not in dicti.keys(): 
-          fillDict(name, schedule)
+            checkOverlappings(dayName, time, name)
+            fillDict(name, schedule)
       else: 
         if time not in dicti[dayName].keys():
-          dicti[dayName][time] = [name]
+            dicti[dayName][time] = [name]
         else: 
           for al in dicti[dayName][time]: 
-            print(f"esta {al} con {name}")
+            fillTable(al, name)
+
             dicti[dayName][time] = list(set(dicti[dayName][time] +[name]))
+
+def areOverlapping(rangeUser1, rangeUser2): 
+    setRange1 = set(rangeUser1)
+    return len(setRange1.intersection(rangeUser2))>0
+
+def checkOverlappings(dayName, timeN, nameN): 
+
+    for time in dicti[dayName].keys():
+        if areOverlapping(time, timeN): 
+            for al in dicti[dayName][time]:     
+                fillTable(al, name)
+        else: 
+            continue
+
+def fillTable(prevName, name): 
+    key = prevName+"-"+name
+    if key not in tableDict.keys(): 
+        tableDict[key] = 1
+    else: 
+        tableDict[key] =tableDict[key]+1
 
 
 
@@ -47,9 +67,9 @@ file1 = open('myfile.txt', 'r')
 lines = file1.readlines()
 
 dicti={}
+tableDict = {}
 for p in lines: 
   name, schedule = separateNameAndSchedule(p)
-  print("llega", name)
   schedule = schedule.split(",")
   if (len(dicti.keys() )==0): 
     fillDict(name,schedule)
@@ -57,4 +77,4 @@ for p in lines:
     checkCrosses(name, schedule)
   
   
-print(dicti)
+print(tableDict)
