@@ -1,12 +1,15 @@
+from Exceptions import NotExistingDay, IsNotInt
+
 class RegisterTable():
     def __init__(self): 
         self.registerDict = {}
         self.summaryDict = {}
         self.DAYSOFWEEK= ["MO", "TU", "WE", "TH", "FR", "SA", "SU"]
-
+        self.NAMESCHEDULESEPARATOR = "="
+        self.RANGEHOURSSEPARATOR = "-"
 
     def convertToRange(self, stringRange):
-        stringList = stringRange.split("-")
+        stringList = stringRange.split(self.RANGEHOURSSEPARATOR)
         numericalRange = tuple(map(lambda x: self.convertStringDateToDecimal(x), stringList))
         return numericalRange
 
@@ -18,34 +21,51 @@ class RegisterTable():
 
     def convertStringDateToDecimal(self,string): 
         h,m = string.split(":")
-        return float(int(h)+int(m)/60)
+        try: 
+            decimalHour = float(int(h)+int(m)/60)
+        except Exception as e: 
+            raise IsNotInt()
+        else:     
+            return 
+ 
 
     def separateDayNameAndTime(self,day): 
+        print(day)
         for weekDay in self.DAYSOFWEEK: 
             if weekDay in day: 
                 time= day.split(weekDay)[-1]
-                dayName = weekDay      
-                return dayName, self.convertToRange(time)
+                dayName = weekDay
+                try: 
+                    self.convertToRange(time)
+                except Exception as e: 
+                    print(e)
+                else: 
+                    return dayName, time
+            else: 
+                continue
 
     def separateNameAndSchedule(self, chain):
-        print(chain)
-        name, schedule = chain.split("=")
+        name, schedule = chain.split(self.NAMESCHEDULESEPARATOR)
         return name, schedule 
 
     def checkCrosses(self, name, schedule):
-        for day in schedule: 
-            dayName, time = self.separateDayNameAndTime(day)
-            if dayName not in self.registerDict.keys(): 
-                self.checkOverlappings(dayName, time, name)
-                self.fillDict(name, schedule)
+        for day in schedule:
+            try:  
+                dayName, time = self.separateDayNameAndTime(day)
+            except Exception as e:
+                print("mal separado", e) 
             else: 
-                if time not in self.registerDict[dayName].keys():
-                    self.registerDict[dayName][time] = [name]
+                if dayName not in self.registerDict.keys(): 
+                    self.checkOverlappings(dayName, time, name)
+                    self.fillDict(name, schedule)
                 else: 
-                    for al in self.registerDict[dayName][time]: 
-                        self.fillTable(al, name)
+                    if time not in self.registerDict[dayName].keys():
+                        self.registerDict[dayName][time] = [name]
+                    else: 
+                        for al in self.registerDict[dayName][time]: 
+                            self.fillTable(al, name)
 
-                        self.registerDict[dayName][time] = list(set(self.registerDict[dayName][time] +[name]))
+                            self.registerDict[dayName][time] = list(set(self.registerDict[dayName][time] +[name]))
 
     def areOverlapping(self, rangeUser1:tuple, rangeUser2:tuple): 
         
