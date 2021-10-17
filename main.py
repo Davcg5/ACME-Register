@@ -21,6 +21,6 @@ if __name__ == "__main__":
             else: 
                 registerTable.checkCrosses(name, schedule)
 
-
+    print(registerTable.registerDict)
     registerTable.retrieveTable()
 

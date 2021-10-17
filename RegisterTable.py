@@ -14,10 +14,19 @@ class RegisterTable():
         return numericalRange
 
     def fillDict(self, name, schedule):
-        for day in schedule:             
+
+        for day in schedule:  
             dayName, time = self.separateDayNameAndTime(day)
-            self.registerDict[dayName] = {}
-            self.registerDict[dayName][time] = [name]
+
+            if dayName not in self.registerDict.keys(): 
+                self.registerDict[dayName] = {}
+                self.registerDict[dayName][time] = [name]
+
+            else: 
+                if time not in self.registerDict[dayName].keys():
+                    self.registerDict[dayName][time] = [name]
+                else: 
+                    self.registerDict[dayName][time] = list(set(self.registerDict[dayName][time] +[name]))
 
     def convertStringDateToDecimal(self,string): 
        
@@ -32,7 +41,7 @@ class RegisterTable():
             except: 
                 raise NotExistingDay()
             else: 
-                return round(float(int(h)+int(m)/60), 2)
+                return float(int(h)+int(m)/60)
 
  
 
@@ -44,7 +53,6 @@ class RegisterTable():
                 try: 
                     time =self.convertToTuple(time)
                 except Exception as e: 
-                    print("aquí?",e)
                     continue
                 else: 
                     return dayName, time
@@ -68,42 +76,33 @@ class RegisterTable():
             except Exception as e:
                 print(e) 
             else: 
+                self.addOverlaps(dayName, time, name)     
+        
+        self.fillDict(name, schedule)
 
-                if dayName not in self.registerDict.keys(): 
-                    self.fillDict(name, schedule)
-                else: 
-                    if time not in self.registerDict[dayName].keys():
-                        self.checkOverlappings(dayName, time, name)
-                        self.registerDict[dayName][time] = [name]
-                    else: 
-                        for al in self.registerDict[dayName][time]: 
-                            self.fillTable(al, name)
+    def addOverlaps(self, dayName, timeN, nameN): 
+        rangeUser1 = self.convertToRange(timeN)
 
-                            self.registerDict[dayName][time] = list(set(self.registerDict[dayName][time] +[name]))
-
-    def areOverlapping(self, rangeUser1:tuple, rangeUser2:tuple): 
-        print("1", rangeUser1)
-        rangeUser1 = self.convertToRange(rangeUser1)
-        rangeUser2 = self.convertToRange(rangeUser2)
-        setRange1 = set(rangeUser1)
-        print("is it ", len(setRange1.intersection(rangeUser2)))
-        return len(setRange1.intersection(rangeUser2))>0
+        for time in self.registerDict[dayName].keys():
+            print("time", time)
+            rangeUser2 = self.convertToRange(time)
+            setRange1 = set(rangeUser1)
+            if len(setRange1.intersection(rangeUser2))>0: 
+                print("overlaps")
+                for al in self.registerDict[dayName][time]: 
+                    self.fillTable(al, nameN)
+            else: 
+                continue
+                
 
     def convertToRange(self, tupleRange): 
         
         begin = int(round(tupleRange[0]*10,0))
         end = int(round(tupleRange[1]*10,0))
-        listRange = [x / 10.0 for x in range(begin, end+1, 1)]
+        listRange = [x / 10.0 for x in range(begin, end, 1)]
         return listRange
 
-    def checkOverlappings(self, dayName, timeN, nameN): 
-        print("acá")
-        for time in self.registerDict[dayName].keys():
-            if self.areOverlapping(time, timeN): 
-                for al in self.registerDict[dayName][time]:     
-                    self.fillTable(al, nameN)
-            else: 
-                continue
+ 
 
     def fillTable(self, prevName, name): 
         key = prevName+"-"+name
