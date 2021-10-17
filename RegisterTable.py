@@ -1,4 +1,4 @@
-from Exceptions import NotExistingDay, IsNotInt
+from Exceptions import NotExistingDay, WrongSeparatorNameSchedule, WrongSeparatorRangeHours
 
 class RegisterTable():
     def __init__(self): 
@@ -8,7 +8,7 @@ class RegisterTable():
         self.NAMESCHEDULESEPARATOR = "="
         self.RANGEHOURSSEPARATOR = "-"
 
-    def convertToRange(self, stringRange):
+    def convertToTuple(self, stringRange):
         stringList = stringRange.split(self.RANGEHOURSSEPARATOR)
         numericalRange = tuple(map(lambda x: self.convertStringDateToDecimal(x), stringList))
         return numericalRange
@@ -20,46 +20,60 @@ class RegisterTable():
             self.registerDict[dayName][time] = [name]
 
     def convertStringDateToDecimal(self,string): 
-        h,m = string.split(":")
+       
         try: 
-            decimalHour = float(int(h)+int(m)/60)
+             h,m = string.split(":")
         except Exception as e: 
-            raise IsNotInt()
-        else:     
-            return 
+            raise WrongSeparatorRangeHours()
+        else:
+            try: 
+                h = int(h) 
+                m = int(m)
+            except: 
+                raise NotExistingDay()
+            else: 
+                return round(float(int(h)+int(m)/60), 2)
+
  
 
     def separateDayNameAndTime(self,day): 
-        print(day)
         for weekDay in self.DAYSOFWEEK: 
             if weekDay in day: 
                 time= day.split(weekDay)[-1]
                 dayName = weekDay
                 try: 
-                    self.convertToRange(time)
+                    time =self.convertToTuple(time)
                 except Exception as e: 
-                    print(e)
+                    print("aquí?",e)
+                    continue
                 else: 
                     return dayName, time
             else: 
                 continue
+        raise NotExistingDay()
 
     def separateNameAndSchedule(self, chain):
-        name, schedule = chain.split(self.NAMESCHEDULESEPARATOR)
-        return name, schedule 
+        try: 
+            name, schedule = chain.split(self.NAMESCHEDULESEPARATOR)
+        except Exception as error: 
+            raise WrongSeparatorNameSchedule
+        else: 
+            return name, schedule 
 
+    
     def checkCrosses(self, name, schedule):
         for day in schedule:
             try:  
                 dayName, time = self.separateDayNameAndTime(day)
             except Exception as e:
-                print("mal separado", e) 
+                print(e) 
             else: 
+
                 if dayName not in self.registerDict.keys(): 
-                    self.checkOverlappings(dayName, time, name)
                     self.fillDict(name, schedule)
                 else: 
                     if time not in self.registerDict[dayName].keys():
+                        self.checkOverlappings(dayName, time, name)
                         self.registerDict[dayName][time] = [name]
                     else: 
                         for al in self.registerDict[dayName][time]: 
@@ -68,16 +82,26 @@ class RegisterTable():
                             self.registerDict[dayName][time] = list(set(self.registerDict[dayName][time] +[name]))
 
     def areOverlapping(self, rangeUser1:tuple, rangeUser2:tuple): 
-        
+        print("1", rangeUser1)
+        rangeUser1 = self.convertToRange(rangeUser1)
+        rangeUser2 = self.convertToRange(rangeUser2)
         setRange1 = set(rangeUser1)
+        print("is it ", len(setRange1.intersection(rangeUser2)))
         return len(setRange1.intersection(rangeUser2))>0
 
-    def checkOverlappings(self, dayName, timeN, nameN): 
+    def convertToRange(self, tupleRange): 
+        
+        begin = int(round(tupleRange[0]*10,0))
+        end = int(round(tupleRange[1]*10,0))
+        listRange = [x / 10.0 for x in range(begin, end+1, 1)]
+        return listRange
 
+    def checkOverlappings(self, dayName, timeN, nameN): 
+        print("acá")
         for time in self.registerDict[dayName].keys():
             if self.areOverlapping(time, timeN): 
                 for al in self.registerDict[dayName][time]:     
-                    fillTable(al, name)
+                    self.fillTable(al, nameN)
             else: 
                 continue
 
@@ -88,3 +112,6 @@ class RegisterTable():
         else: 
             self.summaryDict[key] =self.summaryDict[key]+1
 
+    def retrieveTable(self): 
+        for key, value in self.summaryDict.items(): 
+            print( f"{key}: {value}")

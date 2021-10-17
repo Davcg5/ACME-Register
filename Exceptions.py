@@ -11,9 +11,13 @@ class NotExistingDay(Exception):
     def __init__(self, message = "Day not found"):
         super().__init__(message)
 
+class WrongSeparatorNameSchedule(Exception):
+    def __init__(self, message = "Separator is not correct"):
+        super().__init__(message)
 
-class IsNotInt(Exception):
-    def __init__(self, message = "Is not int "):
+
+class WrongSeparatorRangeHours(Exception):
+    def __init__(self, message = "Separator is not correct for the range of hours"):
         super().__init__(message)
 
 class IncorrectFormat(Exception):

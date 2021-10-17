@@ -3,7 +3,7 @@ from RegisterTable import RegisterTable
 from File import File
 if __name__ == "__main__":
 
-    a = input("Ingrese el nombre del archivo con su ruta ")
+    a = input("Ingrese la ruta relativa del archivo de texto plano ")
 
     f = File(a)
     lines = f.registers
@@ -22,7 +22,5 @@ if __name__ == "__main__":
                 registerTable.checkCrosses(name, schedule)
 
 
-    print(f.errors)
-    print(registerTable.registerDict)
-    print(registerTable.summaryDict)
+    registerTable.retrieveTable()
 

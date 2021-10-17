@@ -1,7 +1,6 @@
 from Exceptions import EmptyFileException, MinLenException, IncorrectFormat
 class File(): 
     def __init__(self, fileName): 
-        self.errors =[]
 
         if self.validateExtension(fileName): 
             self.registers = open(fileName)
@@ -28,7 +27,3 @@ class File():
         elif len(self.registers) <3 : 
             raise MinLenException
   
-    def addError(self, error): 
-        self.errors.append(error)
-        
-    # def retrieveFilterFile():
