@@ -9,17 +9,13 @@ if __name__ == "__main__":
     lines = f.registers
     registerTable = RegisterTable()
 
-    for i, p in enumerate (lines): 
+    for register in lines: 
         try: 
-            name, schedule = registerTable.separateNameAndSchedule(p)
+            name, schedule = registerTable.separateNameAndShifts(register)
         except Exception as error: 
-            print(error)
+            print(f"Avoiding register {register} because of: {error}" )
         else:     
-            schedule = schedule.split(",")
-            if (len(registerTable.registerDict.keys() )==0): 
-                registerTable.fillDict(name, schedule)
-            else: 
-                registerTable.checkCrosses(name, schedule)
+            registerTable.checkPressence(name, schedule)
 
     print(registerTable.registerDict)
     registerTable.retrieveTable()

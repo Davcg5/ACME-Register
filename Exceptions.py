@@ -8,18 +8,18 @@ class MinLenException(Exception):
         super().__init__(message)
 
 class NotExistingDay(Exception):
-    def __init__(self, message = "Day not found"):
+    def __init__(self, message = "Day has not been found in the predefined days of week"):
         super().__init__(message)
 
 class WrongSeparatorNameSchedule(Exception):
-    def __init__(self, message = "Separator is not correct"):
+    def __init__(self, message = "Separator is not correct for the name and shifts"):
         super().__init__(message)
 
 
 class WrongSeparatorRangeHours(Exception):
-    def __init__(self, message = "Separator is not correct for the range of hours"):
+    def __init__(self, message = "Separator is not correct for the time window"):
         super().__init__(message)
 
 class IncorrectFormat(Exception):
-    def __init__(self, message = "Wrong format"):
+    def __init__(self, message = "Wrong format of file"):
         super().__init__(message)
