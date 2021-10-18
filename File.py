@@ -10,7 +10,7 @@ class File():
             self.cleanFile()
             self.checkNumberOfLines()
         else: 
-            raise IncorrectFormat()
+            raise IncorrectFormat
     def cleanFile(self): 
         """
         Delete empty lines from file
@@ -34,6 +34,6 @@ class File():
         """
         if len(self.registers) ==0:
             raise  EmptyFileException
-        elif len(self.registers) <3 : 
+        elif len(self.registers) <5 : 
             raise MinLenException
   

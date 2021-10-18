@@ -6,10 +6,10 @@ if __name__ == "__main__":
     a = input("Ingrese la ruta relativa del archivo de texto plano: ")
 
     f = File(a)
-    lines = f.registers
+    registers = f.registers
     registerTable = RegisterTable()
 
-    for register in lines: 
+    for register in registers: 
         try: 
             name, schedule = registerTable.separateNameAndShifts(register)
         except Exception as error: 
