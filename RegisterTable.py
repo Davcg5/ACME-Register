@@ -2,6 +2,9 @@ from Exceptions import NotExistingDay, WrongSeparatorNameSchedule, WrongSeparato
 from constants import DAYSOFWEEK, NAMESHIFTSSEPARATOR, RANGEHOURSSEPARATOR
 class RegisterTable():
     def __init__(self): 
+        """
+        Initialize variables and set the keys for the registerDict
+        """
         self.registerDict = {}
         self.summaryDict = {}
         self.initializeRegisterDict()
