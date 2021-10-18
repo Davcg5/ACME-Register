@@ -68,6 +68,6 @@ From that, several optimizations were applied in order to make the code as simpl
 3. From a terminal, go to the directory where the solution and the .txt file are. 
 4. (Optional) If you want to run the tests, run *pip install unittest* and then *python test.py*. 
 5. In the terminal type *python main.py*. 
-6. The program will ask for the relative path of the .txt file, if the file is next to the solution (my suggestion), write the name of the file like this: *myfile.txt* or if the file is in a subfolder, write the name of the subfolder followed by the name of the file like this: *name_of_subfolder/myfile.txt*
+6. The program will ask for the path of the .txt file, if the file is next to the solution (my suggestion), write the name of the file like this: *myfile.txt* or if the file is in a subfolder, write the name of the subfolder followed by the name of the file like this: *name_of_subfolder/myfile.txt*
 7. After entering the path of the .txt file, the summary will be shown. 
 

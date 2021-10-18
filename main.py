@@ -3,7 +3,7 @@ from RegisterTable import RegisterTable
 from File import File
 if __name__ == "__main__":
 
-    a = input("Ingrese la ruta relativa del archivo de texto plano: ")
+    a = input("Enter the path of the .txt file: ")
 
     f = File(a)
     registers = f.registers
