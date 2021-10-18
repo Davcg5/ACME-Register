@@ -17,6 +17,5 @@ if __name__ == "__main__":
         else:     
             registerTable.checkPressence(name, schedule)
 
-    print(registerTable.registerDict)
     registerTable.retrieveTable()
 

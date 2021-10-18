@@ -101,7 +101,6 @@ class RegisterTable():
 
                         return dayName, timeWindow
                 else: 
-                    print("po acá")
                     raise  NotExistingDay
             else: 
                 continue
@@ -150,7 +149,6 @@ class RegisterTable():
                 dayName, timeWindow = self.separateDayNameAndTime(shift)
             except Exception as error:
                 exceptionName = error.__class__.__name__
-                print(exceptionName)
                 if exceptionName =="NotExistingDay": 
                     print(f"Avoiding shifts:{shifts} for name: {name} because of: {error}")
                 elif exceptionName == "WrongSeparatorRangeHours":
